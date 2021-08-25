@@ -13140,28 +13140,6 @@ Requirement already satisfied: jmespath&lt;1.0.0,&gt;=0.7.1 in /home/ec2-user/an
 Requirement already satisfied: botocore&lt;1.22.0,&gt;=1.21.21 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from boto3&gt;=1.14.12-&gt;sagemaker==1.72.0) (1.21.21)
 Requirement already satisfied: s3transfer&lt;0.6.0,&gt;=0.5.0 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from boto3&gt;=1.14.12-&gt;sagemaker==1.72.0) (0.5.0)
 Requirement already satisfied: python-dateutil&lt;3.0.0,&gt;=2.1 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from botocore&lt;1.22.0,&gt;=1.21.21-&gt;boto3&gt;=1.14.12-&gt;sagemaker==1.72.0) (2.8.1)
-Requirement already satisfied: urllib3&lt;1.27,&gt;=1.25.4 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from botocore&lt;1.22.0,&gt;=1.21.21-&gt;boto3&gt;=1.14.12-&gt;sagemaker==1.72.0) (1.26.6)
-Requirement already satisfied: typing-extensions&gt;=3.6.4 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from importlib-metadata&gt;=1.4.0-&gt;sagemaker==1.72.0) (3.7.4.3)
-Requirement already satisfied: zipp&gt;=0.5 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from importlib-metadata&gt;=1.4.0-&gt;sagemaker==1.72.0) (3.4.0)
-Requirement already satisfied: pyparsing&gt;=2.0.2 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from packaging&gt;=20.0-&gt;sagemaker==1.72.0) (2.4.7)
-Requirement already satisfied: six&gt;=1.9 in /home/ec2-user/anaconda3/envs/pytorch_latest_p36/lib/python3.6/site-packages (from protobuf&gt;=3.1-&gt;sagemaker==1.72.0) (1.15.0)
-Building wheels for collected packages: sagemaker
-  Building wheel for sagemaker (setup.py) ... done
-  Created wheel for sagemaker: filename=sagemaker-1.72.0-py2.py3-none-any.whl size=386358 sha256=620e0d554ea8b9d3e1ad6db2a77ed3f013d3ed9469eeda37ce9adf9a32d85126
-  Stored in directory: /home/ec2-user/.cache/pip/wheels/c3/58/70/85faf4437568bfaa4c419937569ba1fe54d44c5db42406bbd7
-Successfully built sagemaker
-Installing collected packages: smdebug-rulesconfig, sagemaker
-  Attempting uninstall: smdebug-rulesconfig
-    Found existing installation: smdebug-rulesconfig 1.0.1
-    Uninstalling smdebug-rulesconfig-1.0.1:
-      Successfully uninstalled smdebug-rulesconfig-1.0.1
-  Attempting uninstall: sagemaker
-    Found existing installation: sagemaker 2.48.1
-    Uninstalling sagemaker-2.48.1:
-      Successfully uninstalled sagemaker-2.48.1
-Successfully installed sagemaker-1.72.0 smdebug-rulesconfig-0.1.4
-<span class="ansi-yellow-fg">WARNING: You are using pip version 21.1.3; however, version 21.2.4 is available.
-You should consider upgrading via the &#39;/home/ec2-user/anaconda3/envs/pytorch_latest_p36/bin/python -m pip install --upgrade pip&#39; command.</span>
 </pre>
 </div>
 </div>
@@ -13874,7 +13852,7 @@ Saving to: ‘../data/aclImdb_v1.tar.gz’
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Preprocess data</span>
@@ -15786,6 +15764,202 @@ Epoch: 5, BCELoss: 0.6508132934570312
 <div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pygmentize train/train.py
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">argparse</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">json</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">os</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">pickle</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">sys</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">sagemaker_containers</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">pandas</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">pd</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">optim</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">optim</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">utils</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">data</span>
+
+<span class="ansi-blue-fg">from</span> <span class="ansi-cyan-fg ansi-underline">model</span> <span class="ansi-blue-fg">import</span> LSTMClassifier
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">model_fn</span>(model_dir):
+    <span class="ansi-yellow-fg">&#34;&#34;&#34;Load the PyTorch model from the `model_dir` directory.&#34;&#34;&#34;</span>
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Loading model.</span><span class="ansi-yellow-fg">&#34;</span>)
+
+    <span class="ansi-white-fg"># First, load the parameters used to create the model.</span>
+    model_info = {}
+    model_info_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model_info.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_info_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model_info = torch.load(f)
+
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">model_info: </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">&#34;</span>.format(model_info))
+
+    <span class="ansi-white-fg"># Determine the device and construct the model.</span>
+    device = torch.device(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cuda</span><span class="ansi-yellow-fg">&#34;</span> <span class="ansi-blue-fg">if</span> torch.cuda.is_available() <span class="ansi-blue-fg">else</span> <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cpu</span><span class="ansi-yellow-fg">&#34;</span>)
+    model = LSTMClassifier(model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">embedding_dim</span><span class="ansi-yellow-fg">&#39;</span>], model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">hidden_dim</span><span class="ansi-yellow-fg">&#39;</span>], model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">vocab_size</span><span class="ansi-yellow-fg">&#39;</span>])
+
+    <span class="ansi-white-fg"># Load the stored model parameters.</span>
+    model_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model.load_state_dict(torch.load(f))
+
+    <span class="ansi-white-fg"># Load the saved word_dict.</span>
+    word_dict_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">word_dict.pkl</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(word_dict_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model.word_dict = pickle.load(f)
+
+    model.to(device).eval()
+
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Done loading model.</span><span class="ansi-yellow-fg">&#34;</span>)
+    <span class="ansi-blue-fg">return</span> model
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">_get_train_data_loader</span>(batch_size, training_dir):
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Get train data loader.</span><span class="ansi-yellow-fg">&#34;</span>)
+
+    train_data = pd.read_csv(os.path.join(training_dir, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">train.csv</span><span class="ansi-yellow-fg">&#34;</span>), header=<span class="ansi-blue-fg">None</span>, names=<span class="ansi-blue-fg">None</span>)
+
+    train_y = torch.from_numpy(train_data[[<span class="ansi-blue-fg">0</span>]].values).float().squeeze()
+    train_X = torch.from_numpy(train_data.drop([<span class="ansi-blue-fg">0</span>], axis=<span class="ansi-blue-fg">1</span>).values).long()
+
+    train_ds = torch.utils.data.TensorDataset(train_X, train_y)
+
+    <span class="ansi-blue-fg">return</span> torch.utils.data.DataLoader(train_ds, batch_size=batch_size)
+
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">train</span>(model, train_loader, epochs, optimizer, loss_fn, device):
+    <span class="ansi-yellow-fg">&#34;&#34;&#34;</span>
+<span class="ansi-yellow-fg">    This is the training method that is called by the PyTorch training script. The parameters</span>
+<span class="ansi-yellow-fg">    passed are as follows:</span>
+<span class="ansi-yellow-fg">    model        - The PyTorch model that we wish to train.</span>
+<span class="ansi-yellow-fg">    train_loader - The PyTorch DataLoader that should be used during training.</span>
+<span class="ansi-yellow-fg">    epochs       - The total number of epochs to train for.</span>
+<span class="ansi-yellow-fg">    optimizer    - The optimizer to use during training.</span>
+<span class="ansi-yellow-fg">    loss_fn      - The loss function used for training.</span>
+<span class="ansi-yellow-fg">    device       - Where the model and data should be loaded (gpu or cpu).</span>
+<span class="ansi-yellow-fg">    &#34;&#34;&#34;</span>
+    
+    <span class="ansi-white-fg"># TODO: Paste the train() method developed in the notebook here.</span>
+
+    <span class="ansi-blue-fg">for</span> epoch <span class="ansi-magenta-fg">in</span> <span class="ansi-cyan-fg">range</span>(<span class="ansi-blue-fg">1</span>, epochs + <span class="ansi-blue-fg">1</span>):
+        model.train()
+        total_loss = <span class="ansi-blue-fg">0</span>
+        <span class="ansi-blue-fg">for</span> batch <span class="ansi-magenta-fg">in</span> train_loader:         
+            batch_X, batch_y = batch
+            
+            batch_X = batch_X.to(device)
+            batch_y = batch_y.to(device)
+            
+            <span class="ansi-white-fg"># TODO: Complete this train method to train the model provided.</span>
+            optimizer.zero_grad()
+            output = model.forward(batch_X)
+            loss = loss_fn(output, batch_y)
+            loss.backward()
+            
+            optimizer.step()
+            
+            total_loss += loss.data.item()
+        <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Epoch: </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">, BCELoss: </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">&#34;</span>.format(epoch, total_loss / <span class="ansi-cyan-fg">len</span>(train_loader)))
+
+
+<span class="ansi-blue-fg">if</span> <span class="ansi-red-fg">__name__</span> == <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">__main__</span><span class="ansi-yellow-fg">&#39;</span>:
+    <span class="ansi-white-fg"># All of the model parameters and training parameters are sent as arguments when the script</span>
+    <span class="ansi-white-fg"># is executed. Here we set up an argument parser to easily access the parameters.</span>
+
+    parser = argparse.ArgumentParser()
+
+    <span class="ansi-white-fg"># Training Parameters</span>
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--batch-size</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">512</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">N</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">input batch size for training (default: 512)</span><span class="ansi-yellow-fg">&#39;</span>)
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--epochs</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">10</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">N</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">number of epochs to train (default: 10)</span><span class="ansi-yellow-fg">&#39;</span>)
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--seed</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">1</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">S</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">random seed (default: 1)</span><span class="ansi-yellow-fg">&#39;</span>)
+
+    <span class="ansi-white-fg"># Model Parameters</span>
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--embedding_dim</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">32</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">N</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">size of the word embeddings (default: 32)</span><span class="ansi-yellow-fg">&#39;</span>)
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--hidden_dim</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">100</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">N</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">size of the hidden dimension (default: 100)</span><span class="ansi-yellow-fg">&#39;</span>)
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--vocab_size</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=<span class="ansi-blue-fg">5000</span>, metavar=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">N</span><span class="ansi-yellow-fg">&#39;</span>,
+                        help=<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">size of the vocabulary (default: 5000)</span><span class="ansi-yellow-fg">&#39;</span>)
+
+    <span class="ansi-white-fg"># SageMaker Parameters</span>
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--hosts</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">list</span>, default=json.loads(os.environ[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">SM_HOSTS</span><span class="ansi-yellow-fg">&#39;</span>]))
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--current-host</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">str</span>, default=os.environ[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">SM_CURRENT_HOST</span><span class="ansi-yellow-fg">&#39;</span>])
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--model-dir</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">str</span>, default=os.environ[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">SM_MODEL_DIR</span><span class="ansi-yellow-fg">&#39;</span>])
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--data-dir</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">str</span>, default=os.environ[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">SM_CHANNEL_TRAINING</span><span class="ansi-yellow-fg">&#39;</span>])
+    parser.add_argument(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">--num-gpus</span><span class="ansi-yellow-fg">&#39;</span>, <span class="ansi-cyan-fg">type</span>=<span class="ansi-cyan-fg">int</span>, default=os.environ[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">SM_NUM_GPUS</span><span class="ansi-yellow-fg">&#39;</span>])
+
+    args = parser.parse_args()
+
+    device = torch.device(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cuda</span><span class="ansi-yellow-fg">&#34;</span> <span class="ansi-blue-fg">if</span> torch.cuda.is_available() <span class="ansi-blue-fg">else</span> <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cpu</span><span class="ansi-yellow-fg">&#34;</span>)
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Using device </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">.</span><span class="ansi-yellow-fg">&#34;</span>.format(device))
+
+    torch.manual_seed(args.seed)
+
+    <span class="ansi-white-fg"># Load the training data.</span>
+    train_loader = _get_train_data_loader(args.batch_size, args.data_dir)
+
+    <span class="ansi-white-fg"># Build the model.</span>
+    model = LSTMClassifier(args.embedding_dim, args.hidden_dim, args.vocab_size).to(device)
+
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(os.path.join(args.data_dir, <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">word_dict.pkl</span><span class="ansi-yellow-fg">&#34;</span>), <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#34;</span>) <span class="ansi-blue-fg">as</span> f:
+        model.word_dict = pickle.load(f)
+
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Model loaded with embedding_dim </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">, hidden_dim </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">, vocab_size </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">.</span><span class="ansi-yellow-fg">&#34;</span>.format(
+        args.embedding_dim, args.hidden_dim, args.vocab_size
+    ))
+
+    <span class="ansi-white-fg"># Train the model.</span>
+    optimizer = optim.Adam(model.parameters())
+    loss_fn = torch.nn.BCELoss()
+
+    train(model, train_loader, args.epochs, optimizer, loss_fn, device)
+
+    <span class="ansi-white-fg"># Save the parameters used to construct the model</span>
+    model_info_path = os.path.join(args.model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model_info.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_info_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">wb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model_info = {
+            <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">embedding_dim</span><span class="ansi-yellow-fg">&#39;</span>: args.embedding_dim,
+            <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">hidden_dim</span><span class="ansi-yellow-fg">&#39;</span>: args.hidden_dim,
+            <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">vocab_size</span><span class="ansi-yellow-fg">&#39;</span>: args.vocab_size,
+        }
+        torch.save(model_info, f)
+
+	<span class="ansi-white-fg"># Save the word_dict</span>
+    word_dict_path = os.path.join(args.model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">word_dict.pkl</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(word_dict_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">wb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        pickle.dump(model.word_dict, f)
+
+	<span class="ansi-white-fg"># Save the model parameters</span>
+    model_path = os.path.join(args.model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">wb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        torch.save(model.cpu().state_dict(), f)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.pytorch</span> <span class="kn">import</span> <span class="n">PyTorch</span>
 
 <span class="n">estimator</span> <span class="o">=</span> <span class="n">PyTorch</span><span class="p">(</span><span class="n">entry_point</span><span class="o">=</span><span class="s2">&quot;train.py&quot;</span><span class="p">,</span>
@@ -15857,10 +16031,10 @@ Epoch: 5, BCELoss: 0.6508132934570312
 <span class="ansi-blue-fg">2021-08-25 12:13:58,030 sagemaker-containers INFO     Installing module with the following command:</span>
 <span class="ansi-blue-fg">/usr/bin/python -m pip install -U . -r requirements.txt</span>
 <span class="ansi-blue-fg">Processing /opt/ml/code</span>
-<span class="ansi-blue-fg">Collecting pandas (from -r requirements.txt (line 1))</span>
-<span class="ansi-blue-fg">  Downloading https://files.pythonhosted.org/packages/74/24/0cdbf8907e1e3bc5a8da03345c23cbed7044330bb8f73bb12e711a640a00/pandas-0.24.2-cp35-cp35m-manylinux1_x86_64.whl (10.0MB)</span>
-<span class="ansi-blue-fg">Collecting numpy (from -r requirements.txt (line 2))
-  Downloading https://files.pythonhosted.org/packages/b5/36/88723426b4ff576809fec7d73594fe17a35c27f8d01f93637637a29ae25b/numpy-1.18.5-cp35-cp35m-manylinux1_x86_64.whl (19.9MB)</span>
+<span class="ansi-blue-fg">Collecting pandas (from -r requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/74/24/0cdbf8907e1e3bc5a8da03345c23cbed7044330bb8f73bb12e711a640a00/pandas-0.24.2-cp35-cp35m-manylinux1_x86_64.whl (10.0MB)</span>
+<span class="ansi-blue-fg">Collecting numpy (from -r requirements.txt (line 2))</span>
+<span class="ansi-blue-fg">  Downloading https://files.pythonhosted.org/packages/b5/36/88723426b4ff576809fec7d73594fe17a35c27f8d01f93637637a29ae25b/numpy-1.18.5-cp35-cp35m-manylinux1_x86_64.whl (19.9MB)</span>
 <span class="ansi-blue-fg">Collecting nltk (from -r requirements.txt (line 3))
   Downloading https://files.pythonhosted.org/packages/5e/37/9532ddd4b1bbb619333d5708aaad9bf1742f051a664c3c6fa6632a105fd8/nltk-3.6.2-py3-none-any.whl (1.5MB)</span>
 <span class="ansi-blue-fg">Collecting beautifulsoup4 (from -r requirements.txt (line 4))
